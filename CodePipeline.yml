@@ -191,7 +191,7 @@ Resources:
               Version: 1
               Provider: CloudFormation
             InputArtifacts:
-              - Name: source-output-artifacts
+              - Name: ops-source-output-artifacts
               - Name: build-output-artifacts
             Configuration:
                 ActionMode: CREATE_UPDATE
