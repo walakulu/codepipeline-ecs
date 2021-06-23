@@ -172,6 +172,21 @@ Resources:
       Port: 80
       Protocol: HTTP
 
+# Application Load Balancer listener.This could use to microservice load-balancing
+  ListenerRule1:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - '/micro-service-1'
+      ListenerArn: !Ref LoadBalancerListener
+      Priority: 1
+
   # Create an ECS Service and add created Cluster, TaskDefintion, Subnets, TargetGroup and SecurityGroup
   ECSService:
     Type: AWS::ECS::Service
