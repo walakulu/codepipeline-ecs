@@ -156,6 +156,8 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'TargetGroup']]
+      Matcher:
+        HttpCode: 404
       Port: 80
       Protocol: HTTP
       TargetType: ip
@@ -183,7 +185,7 @@ Resources:
         - Field: path-pattern
           PathPatternConfig:
             Values:
-              - '/micro-service-1'
+              - '/micro-service-1/*'
       ListenerArn: !Ref LoadBalancerListener
       Priority: 1
 
