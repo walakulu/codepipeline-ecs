@@ -4,22 +4,25 @@ Description: The CloudFormation template for the CodePipeline.
 Parameters:
   Stage:
     Type: String
-    Default: prod
+    Default: dev
   GithubUserName:
     Type: String
-    Default: django-demo-111
+    Default: <GithubUser>
   GithubRepo:
     Type: String
-    Default: eshipping
+    Default: spring-codepipeline
+  GithubOpsRepo:
+    Type: String
+    Default: codepipeline-ecs
   GithubBranch:
     Type: String
     Default: master
   GithubOAuthToken:
     Type: String
-    Default: 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
+    Default: <GithubAccessToken>
   ContainerPort:
     Type: Number
-    Default: 8000
+    Default: 8080
 
 Resources:
   # Create an ECR Repository to store docker images
@@ -129,6 +132,24 @@ Resources:
             OutputArtifacts:
               - Name: source-output-artifacts
 
+        # Download Ops source code from Github Repo to ops-source-output-artifacts path in S3 Bucket
+        - Name: OpsSource
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              Configuration:
+                Repo: !Ref GithubOpsRepo
+                Branch: !Ref GithubBranch
+                Owner: !Ref GithubUserName
+                OAuthToken: !Ref GithubOAuthToken
+              RunOrder: 1
+              OutputArtifacts:
+                - Name: ops-source-output-artifacts
+
         # Build the project using the BuildProject and Output build artifacts to build-output-artifacts path in S3 Bucket
         - Name: Build
           Actions:
@@ -171,5 +192,5 @@ Resources:
                 RoleArn:
                   Fn::GetAtt: [ CloudformationExecutionRole, Arn ]
                 StackName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'FargateECSCluster']]
-                TemplatePath: source-output-artifacts::Cloudformation/Fargate-Cluster.yml
+                TemplatePath: ops-source-output-artifacts::Fargate-Cluster.yml
             RunOrder: 1
