@@ -115,6 +115,7 @@ Resources:
       Stages:
 
         # Download source code from Github Repo to source-output-artifacts path in S3 Bucket
+        # Download Ops source code from Github Repo to ops-source-output-artifacts path in S3 Bucket
         - Name: Source
           Actions:
           - Name: Source
@@ -131,24 +132,37 @@ Resources:
             RunOrder: 1
             OutputArtifacts:
               - Name: source-output-artifacts
-
+          - Name: OpsSource
+            ActionTypeId:
+              Category: Source
+              Owner: ThirdParty
+              Provider: GitHub
+              Version: 1
+            Configuration:
+              Repo: !Ref GithubOpsRepo
+              Branch: !Ref GithubBranch
+              Owner: !Ref GithubUserName
+              OAuthToken: !Ref GithubOAuthToken
+            RunOrder: 1
+            OutputArtifacts:
+              - Name: ops-source-output-artifacts
         # Download Ops source code from Github Repo to ops-source-output-artifacts path in S3 Bucket
-        - Name: OpsSource
-          Actions:
-            - Name: Source
-              ActionTypeId:
-                Category: Source
-                Owner: ThirdParty
-                Provider: GitHub
-                Version: 1
-              Configuration:
-                Repo: !Ref GithubOpsRepo
-                Branch: !Ref GithubBranch
-                Owner: !Ref GithubUserName
-                OAuthToken: !Ref GithubOAuthToken
-              RunOrder: 1
-              OutputArtifacts:
-                - Name: ops-source-output-artifacts
+#        - Name: OpsSource
+#          Actions:
+#            - Name: Source
+#              ActionTypeId:
+#                Category: Source
+#                Owner: ThirdParty
+#                Provider: GitHub
+#                Version: 1
+#              Configuration:
+#                Repo: !Ref GithubOpsRepo
+#                Branch: !Ref GithubBranch
+#                Owner: !Ref GithubUserName
+#                OAuthToken: !Ref GithubOAuthToken
+#              RunOrder: 1
+#              OutputArtifacts:
+#                - Name: ops-source-output-artifacts
 
         # Build the project using the BuildProject and Output build artifacts to build-output-artifacts path in S3 Bucket
         - Name: Build
