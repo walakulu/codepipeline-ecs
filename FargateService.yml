@@ -10,6 +10,8 @@ Parameters:
     Type: String
   AppName:
     Type: String
+  LoadbalancerListnerRulePriority:
+    Type: String
 
 Resources:
 
@@ -69,7 +71,7 @@ Resources:
             Values:
               - !Sub '/${AppName}/*'
       ListenerArn: !ImportValue LoadBalancerListener
-      Priority: 1
+      Priority: !Ref LoadbalancerListnerRulePriority
 
   # Create an ECS Service and add created Cluster, TaskDefintion, Subnets, TargetGroup and SecurityGroup
   ECSService:
