@@ -48,7 +48,7 @@ Resources:
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Join ['-', [!Ref Stage,!Ref AppName, 'TargetGroup']]
+      Name: !Join ['-', [!Ref Stage,!Ref AppName, 'TG']]
       Matcher:
         HttpCode: 404
       Port: 80
