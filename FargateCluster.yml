@@ -187,7 +187,7 @@ Resources:
         - Field: path-pattern
           PathPatternConfig:
             Values:
-              - '/micro-service-1/*'
+              - !Sub '/${AppName}/*'
       ListenerArn: !Ref LoadBalancerListener
       Priority: 1
 
@@ -199,7 +199,7 @@ Resources:
       ServiceName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'ECSService']]
       Cluster: !Ref Cluster
       TaskDefinition: !Ref TaskDefinition
-      DesiredCount: 2
+      DesiredCount: 1
       LaunchType: FARGATE
       NetworkConfiguration: 
         AwsvpcConfiguration:
