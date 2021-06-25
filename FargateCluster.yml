@@ -8,6 +8,8 @@ Parameters:
     Type: Number
   ImageURI:
     Type: String
+  AppName:
+    Type: String
 
 Resources:
 
@@ -218,3 +220,38 @@ Outputs:
     Value: !GetAtt
       - LoadBalancer
       - DNSName
+  ECSLoadBalancerListener:
+    Description: LoadBalancerListener
+    Value: !Ref LoadBalancerListener
+    Export:
+      Name: LoadBalancerListener
+  LoadBalancerSecurityGroup:
+    Description: LoadBalancerSecurityGroup
+    Value: !Ref LoadBalancerSecurityGroup
+    Export:
+      Name: LoadBalancerSecurityGroup
+  EcsTaskExecutionRole:
+    Description: ECS Task Execution Role
+    Value: !Ref ExecutionRole
+    Export:
+      Name: EcsTaskExecutionRole
+  ClusterVPC:
+    Description: Cluster VPC
+    Value: !Ref VPC
+    Export:
+      Name: ClusterVPC
+  ECSCluster:
+    Description: ECS Cluster
+    Value: !Ref Cluster
+    Export:
+      Name: ECSCluster
+  SubnetA:
+    Description: SubnetA
+    Value: !Ref SubnetA
+    Export:
+      Name: SubnetA
+  SubnetB:
+    Description: SubnetB
+    Value: !Ref SubnetB
+    Export:
+      Name: SubnetB
