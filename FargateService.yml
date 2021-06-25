@@ -11,7 +11,7 @@ Parameters:
   AppName:
     Type: String
   LoadbalancerListnerRulePriority:
-    Type: String
+    Type: Number
 
 Resources:
 
