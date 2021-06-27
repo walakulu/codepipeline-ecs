@@ -142,7 +142,7 @@ Resources:
               Version: 1
             Configuration:
               Repo: !Ref GithubOpsRepo
-              Branch: microservice-6-customize
+              Branch: microservice-6-customize-blue-green
               Owner: !Ref GithubUserName
               OAuthToken: !Ref GithubOAuthToken
             RunOrder: 1
