@@ -25,7 +25,7 @@ Hooks:
       Applications:
         - Target:
             Type: 'AWS::ECS::Service'
-            LogicalID: ECSDemoService
+            LogicalID: ECSService
           ECSAttributes:
             TaskDefinitions:
               - BlueTaskDefinition
@@ -33,7 +33,7 @@ Hooks:
             TrafficRouting:
               ProdTrafficRoute:
                 Type: 'AWS::ElasticLoadBalancingV2::Listener'
-                LogicalID: ALBListenerProdTraffic
+                LogicalID: LoadBalancerListener
               TargetGroups:
                 - ALBTargetGroupBlue
                 - ALBTargetGroupGreen
