@@ -25,10 +25,6 @@ Parameters:
     Type: Number
     Default: 8080
     Description: Container port for microservice 1
-  MS2ContainerPort:
-    Type: Number
-    Default: 8080
-    Description: Container port for microservice 2
 
 Resources:
   # Create an ECR Repository to store docker images
