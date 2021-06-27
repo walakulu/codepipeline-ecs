@@ -242,6 +242,7 @@ Resources:
       Cluster: !Ref Cluster
       TaskDefinition: !Ref BlueTaskDefinition
       DesiredCount: 1
+      DeploymentController: EXTERNAL
       LaunchType: FARGATE
       NetworkConfiguration: 
         AwsvpcConfiguration:
