@@ -179,7 +179,7 @@ Resources:
               - Name: build-output-artifacts
             Configuration:
                 ActionMode: CREATE_UPDATE
-                Capabilities: CAPABILITY_NAMED_IAM
+                Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 # Pass parameter values to FargateCluster.yml for deployment
                 ParameterOverrides: !Sub |
                   {

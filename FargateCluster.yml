@@ -30,6 +30,9 @@ Hooks:
             TaskDefinitions:
               - BlueTaskDefinition
               - GreenTaskDefinition
+            TaskSets:
+              - BlueTaskSet
+              - GreenTaskSet
             TrafficRouting:
               ProdTrafficRoute:
                 Type: 'AWS::ElasticLoadBalancingV2::Listener'
@@ -252,6 +255,38 @@ Resources:
         - ContainerName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'Container']]
           ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref ALBTargetGroupBlue
+
+  BlueTaskSet:
+    Type: "AWS::ECS::TaskSet"
+    Properties:
+      Cluster: !Ref Cluster
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsVpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !Ref LoadBalancerSecurityGroup
+          Subnets:
+            - !Ref SubnetA
+            - !Ref SubnetB
+      PlatformVersion: 1.4.0
+      Scale:
+        Unit: PERCENT
+        Value: 100
+      Service: !Ref ECSService
+      TaskDefinition: !Ref BlueTaskDefinition
+      LoadBalancers:
+        - ContainerName: DemoApp
+          ContainerPort: 80
+          TargetGroupArn: !Ref ALBTargetGroupBlue
+  PrimaryTaskSet:
+    Type: "AWS::ECS::PrimaryTaskSet"
+    Properties:
+      Cluster: !Ref Cluster
+      Service: !Ref ECSService
+      TaskSetId: !GetAtt
+        - BlueTaskSet
+        - Id
 
 Outputs:
   LoadBalancerUrl:
