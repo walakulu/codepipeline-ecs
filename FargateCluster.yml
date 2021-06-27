@@ -207,16 +207,16 @@ Resources:
       Port: 80
       Protocol: HTTP
 
-  ALBTargetGroupGreen:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'TargetGroup']]
-      Matcher:
-        HttpCode: 404
-      Port: 80
-      Protocol: HTTP
-      TargetType: ip
-      VpcId: !Ref VPC
+#  ALBTargetGroupGreen:
+#    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+#    Properties:
+#      Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'TargetGroup']]
+#      Matcher:
+#        HttpCode: 404
+#      Port: 80
+#      Protocol: HTTP
+#      TargetType: ip
+#      VpcId: !Ref VPC
 
 # Application Load Balancer listener.This could use to microservice load-balancing
   ListenerRule1:
