@@ -11,6 +11,34 @@ Parameters:
   AppName:
     Type: String
 
+Transform:
+  - 'AWS::CodeDeployBlueGreen'
+
+Hooks:
+  CodeDeployBlueGreenHook:
+    Properties:
+      TrafficRoutingConfig:
+        Type: TimeBasedCanary
+        TimeBasedCanary:
+          StepPercentage: 15
+          BakeTimeMins: 5
+      Applications:
+        - Target:
+            Type: 'AWS::ECS::Service'
+            LogicalID: ECSDemoService
+          ECSAttributes:
+            TaskDefinitions:
+              - BlueTaskDefinition
+              - GreenTaskDefinition
+            TrafficRouting:
+              ProdTrafficRoute:
+                Type: 'AWS::ElasticLoadBalancingV2::Listener'
+                LogicalID: ALBListenerProdTraffic
+              TargetGroups:
+                - ALBTargetGroupBlue
+                - ALBTargetGroupGreen
+    Type: 'AWS::CodeDeploy::BlueGreen'
+
 Resources:
 
   # Create an ECS Cluster
@@ -98,7 +126,7 @@ Resources:
         - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
 
   # Create a TaskDefinition with container details
-  TaskDefinition:
+  BlueTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties: 
       Memory: 1024
@@ -154,7 +182,7 @@ Resources:
       Type: application
 
   # Create a TargetGroup for HTTP port 80
-  TargetGroup:
+  ALBTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'TargetGroup']]
@@ -170,11 +198,22 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions: 
-        - TargetGroupArn: !Ref TargetGroup
+        - TargetGroupArn: !Ref ALBTargetGroupBlue
           Type: forward
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
       Protocol: HTTP
+
+  ALBTargetGroupGreen:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'TargetGroup']]
+      Matcher:
+        HttpCode: 404
+      Port: 80
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: !Ref VPC
 
 # Application Load Balancer listener.This could use to microservice load-balancing
   ListenerRule1:
@@ -182,7 +221,7 @@ Resources:
     Properties:
       Actions:
         - Type: forward
-          TargetGroupArn: !Ref TargetGroup
+          TargetGroupArn: !Ref ALBTargetGroupBlue
       Conditions:
         - Field: path-pattern
           PathPatternConfig:
@@ -198,7 +237,7 @@ Resources:
     Properties:
       ServiceName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'ECSService']]
       Cluster: !Ref Cluster
-      TaskDefinition: !Ref TaskDefinition
+      TaskDefinition: !Ref BlueTaskDefinition
       DesiredCount: 1
       LaunchType: FARGATE
       NetworkConfiguration: 
@@ -212,7 +251,7 @@ Resources:
       LoadBalancers:
         - ContainerName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', 'Container']]
           ContainerPort: !Ref ContainerPort
-          TargetGroupArn: !Ref TargetGroup
+          TargetGroupArn: !Ref ALBTargetGroupBlue
 
 Outputs:
   LoadBalancerUrl:
