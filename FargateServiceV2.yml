@@ -133,3 +133,10 @@ Resources:
         - ContainerName: !Join ['-', [!Ref Stage, !Ref 'AWS::AccountId', !Ref AppName]]
           ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref TargetGroup
+
+Outputs:
+  Loadbalancer:
+    Description: Loadbalancer details
+    Value: !Ref LoadBalancer
+    Export:
+      Name: !Join ['-', [!Ref Stage, !Ref AppName, 'ALB']]
