@@ -135,8 +135,9 @@ Resources:
           TargetGroupArn: !Ref TargetGroup
 
 Outputs:
-  Loadbalancer:
-    Description: Loadbalancer details
-    Value: !Ref LoadBalancer
-    Export:
-      Name: !Join ['-', [!Ref AppName, 'ALB']]
+  LoadBalancerUrl:
+    Description: Application URL
+    Value: !GetAtt
+      - LoadBalancer
+      - DNSName
+    Name: !Join ['-', [!Ref AppName, 'ALB']]
