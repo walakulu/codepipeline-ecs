@@ -70,7 +70,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: !Ref ContainerPort
           ToPort: !Ref ContainerPort
-          SourceSecurityGroupId: !ImportValue LoadBalancerSecurityGroup
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
 
   # Create a TargetGroup for HTTP port 80
   TargetGroup:
