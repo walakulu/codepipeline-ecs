@@ -43,7 +43,6 @@ Resources:
             Options:
               awslogs-group: !Ref AppName
               awslogs-region: !Ref AWS::Region
-              awslogs-prefix: 'gateway'
 
   # Create a LoadBalancer and attach the Security group and Subnets
   LoadBalancer:
