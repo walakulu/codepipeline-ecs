@@ -34,6 +34,9 @@ Resources:
               HostPort: !Ref ContainerPort
           LogConfiguration:
             LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: !Ref AppName
 
   # Create a LoadBalancer and attach the Security group and Subnets
   LoadBalancer:
