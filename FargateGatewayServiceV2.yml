@@ -15,6 +15,12 @@ Parameters:
 
 Resources:
 
+  CloudwatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref AppName
+      RetentionInDays: 7
+
   # Create a TaskDefinition with container details
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -37,6 +43,7 @@ Resources:
             Options:
               awslogs-group: !Ref AppName
               awslogs-region: !Ref AWS::Region
+              awslogs-prefix: 'gateway'
 
   # Create a LoadBalancer and attach the Security group and Subnets
   LoadBalancer:
