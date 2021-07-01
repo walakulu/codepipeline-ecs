@@ -140,4 +140,5 @@ Outputs:
     Value: !GetAtt
       - LoadBalancer
       - DNSName
-    Name: !Join ['-', [!Ref AppName, 'ALB']]
+    Export:
+     Name: !Join ['-', [!Ref AppName, 'ALB']]
