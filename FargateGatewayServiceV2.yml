@@ -32,6 +32,8 @@ Resources:
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               HostPort: !Ref ContainerPort
+          LogConfiguration:
+            LogDriver: awslogs
 
   # Create a LoadBalancer and attach the Security group and Subnets
   LoadBalancer:
