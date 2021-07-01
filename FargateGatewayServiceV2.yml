@@ -35,6 +35,7 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
+              awslogs-group: !Ref AppName
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: !Ref AppName
 
