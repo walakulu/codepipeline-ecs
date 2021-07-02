@@ -1,6 +1,7 @@
-Description: This template deploys a VPC, with a pair of public and private subnets spread
-  across two Availability Zones. In addition to that, it will create necessary resources to
-  share between other sub tenplates (ex: S3 bucket, TaskExecution Rules tec)
+Description: >-
+  This template deploys a VPC, with a pair of public and private subnets spread
+  across two Availability Zones. In addition to that, it will create necessary
+  resources to support pipeline deployment.
 
 Parameters:
   Stage:
