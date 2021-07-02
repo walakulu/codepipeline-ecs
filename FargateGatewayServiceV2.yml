@@ -108,21 +108,6 @@ Resources:
       Protocol: HTTP
 
 
-  # Application Load Balancer listener.This could use to microservice load-balancing
-  #  ListenerRule1:
-  #    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
-  #    Properties:
-  #      Actions:
-  #        - Type: forward
-  #          TargetGroupArn: !Ref TargetGroup
-  #      Conditions:
-  #        - Field: path-pattern
-  #          PathPatternConfig:
-  #            Values:
-  #              - !Sub '/${AppName}/*'
-  #      ListenerArn: !ImportValue LoadBalancerListener
-  #      Priority: !Ref LoadbalancerListnerRulePriority
-
   # Create an ECS Service and add created Cluster, TaskDefintion, Subnets, TargetGroup and SecurityGroup
   ECSService:
     Type: AWS::ECS::Service

@@ -15,6 +15,12 @@ Parameters:
 
 Resources:
 
+  CloudwatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref AppName
+      RetentionInDays: 7
+
   # Create a TaskDefinition with container details
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -32,6 +38,12 @@ Resources:
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               HostPort: !Ref ContainerPort
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref AppName
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: 'microservice'
 
   # Create a LoadBalancer and attach the Security group and Subnets
   LoadBalancer:
@@ -94,22 +106,6 @@ Resources:
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
       Protocol: HTTP
-
-
-  # Application Load Balancer listener.This could use to microservice load-balancing
-#  ListenerRule1:
-#    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
-#    Properties:
-#      Actions:
-#        - Type: forward
-#          TargetGroupArn: !Ref TargetGroup
-#      Conditions:
-#        - Field: path-pattern
-#          PathPatternConfig:
-#            Values:
-#              - !Sub '/${AppName}/*'
-#      ListenerArn: !ImportValue LoadBalancerListener
-#      Priority: !Ref LoadbalancerListnerRulePriority
 
   # Create an ECS Service and add created Cluster, TaskDefintion, Subnets, TargetGroup and SecurityGroup
   ECSService:
