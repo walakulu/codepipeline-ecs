@@ -57,6 +57,16 @@ Resources:
         - !ImportValue PrivateSubnet2
       Type: application
 
+ # Store LoadBalancer DNS name in ParameterStore
+  LoadBalancerDnsParamater:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join ['', ['/',!Ref Stage, !Ref AppName, 'LbDns']]
+      Description: Loadbalancer DNS Name to Store in ParamaterStore
+      Tier: Standard
+      Type: String
+      Value: !GetAtt LoadBalancer.DNSName
+
   # Creat a security group for load balancer and open port 80 in bound from internet
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
