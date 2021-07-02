@@ -1,37 +1,11 @@
 Description: This template deploys a VPC, with a pair of public and private subnets spread
-  across two Availability Zones. It deploys an internet gateway, with a default
-  route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
-  and default routes for them in the private subnets.
+  across two Availability Zones. In addition to that, it will create necessary resources to
+  share between other sub tenplates (ex: S3 bucket, TaskExecution Rules tec)
 
 Parameters:
   Stage:
     Type: String
     Default: dev
-#
-#  VpcCIDR:
-#    Description: Please enter the IP range (CIDR notation) for this VPC
-#    Type: String
-#    Default: 10.192.0.0/16
-
-#  PublicSubnet1CIDR:
-#    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
-#    Type: String
-#    Default: 10.192.10.0/24
-
-#  PublicSubnet2CIDR:
-#    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
-#    Type: String
-#    Default: 10.192.11.0/24
-
-#  PrivateSubnet1CIDR:
-#    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
-#    Type: String
-#    Default: 10.192.20.0/24
-
-#  PrivateSubnet2CIDR:
-#    Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
-#    Type: String
-#    Default: 10.192.21.0/24
 
 Resources:
 
@@ -206,13 +180,6 @@ Resources:
     Properties:
       Domain: vpc
 
-#  NoIngressSecurityGroup:
-#    Type: AWS::EC2::SecurityGroup
-#    Properties:
-#      GroupName: "no-ingress-sg"
-#      GroupDescription: "Security group with no ingress rule"
-#      VpcId: !Ref MicroServiceVPC
-
   # Create an ECS Cluster For Services
   ServiceCluster:
     Type: AWS::ECS::Cluster
@@ -356,7 +323,3 @@ Outputs:
     Value: !GetAtt CloudformationExecutionRole.Arn
     Export:
       Name: CloudformationExecutionRoleArn
-
-#  NoIngressSecurityGroup:
-#    Description: Security group with no ingress rule
-#    Value: !Ref NoIngressSecurityGroup

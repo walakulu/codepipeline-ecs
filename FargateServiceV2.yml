@@ -10,8 +10,6 @@ Parameters:
     Type: String
   AppName:
     Type: String
-  LoadbalancerListnerRulePriority:
-    Type: Number
 
 Resources:
 

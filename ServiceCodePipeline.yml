@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: The CloudFormation template for the CodePipeline.
+Description: The CloudFormation template for the Private Subnet CodePipelines.
 
 Parameters:
   Stage:
@@ -11,23 +11,26 @@ Parameters:
   MSGithubRepo:
     Type: String
     Description: Github Repo name for microservice
+  MSGithubBranch:
+    Type: String
+    Default: master
   GithubOpsRepo:
     Type: String
     Default: codepipeline-ecs
-  GithubBranch:
+  OpsGithubBranch:
     Type: String
-    Default: master
+    Default: feature/microservice-v2
   GithubOAuthToken:
     Type: String
     Default: <GithubAccessToken>
   MSContainerPort:
     Type: Number
     Default: 8080
-    Description: Container port for microservice 2
-  LoadbalancerListnerRulePriority:
-    Type: Number
-    Default: 2
-    Description: Loadbalancer Listner Priority Rule Number
+    Description: Container port for microservice
+#  LoadbalancerListnerRulePriority:
+#    Type: Number
+#    Default: 2
+#    Description: Loadbalancer Listner Priority Rule Number
 
 
 Resources:
@@ -85,7 +88,7 @@ Resources:
                 Version: 1
               Configuration:
                 Repo: !Ref MSGithubRepo
-                Branch: !Ref GithubBranch
+                Branch: !Ref MSGithubBranch
                 Owner: !Ref GithubUserName
                 OAuthToken: !Ref GithubOAuthToken
               RunOrder: 1
@@ -99,7 +102,7 @@ Resources:
                 Version: 1
               Configuration:
                 Repo: !Ref GithubOpsRepo
-                Branch: feature/microservice-v2
+                Branch: !Ref OpsGithubBranch
                 Owner: !Ref GithubUserName
                 OAuthToken: !Ref GithubOAuthToken
               RunOrder: 1
@@ -143,8 +146,7 @@ Resources:
                     "ImageURI" : { "Fn::GetParam" : ["build-output-artifacts", "imageDetail.json", "ImageURI"] },
                     "Stage":  "${Stage}",
                     "ContainerPort": "${MSContainerPort}",
-                    "AppName": "${MSGithubRepo}",
-                    "LoadbalancerListnerRulePriority": "${LoadbalancerListnerRulePriority}"
+                    "AppName": "${MSGithubRepo}"
                   }
                 RoleArn: !ImportValue CloudformationExecutionRoleArn
                 StackName: !Join ['-', [!Ref Stage,!Ref MSGithubRepo, 'FargateECSService']]
